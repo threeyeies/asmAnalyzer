@@ -7,6 +7,7 @@ ExitProcess proto,dwExitCode:dword
 
 .data
 sum DWORD ?
+suma DWORD 12
 
 .code
 main proc
