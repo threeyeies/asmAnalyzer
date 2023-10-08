@@ -1,13 +1,16 @@
 import re  # biblioteca regular expression
-import syntan
+import syntan  # Importando syntax analysis
 
-lineStates = []
-state = False
+lineStates = []  # Lista para guardar (linea,estado)
+state = False  # Variable solo para debugear en consola y ver si ya detecta como correcto las instrucciones
+# Quitar en la entrega final
 
 
 def show():
+
     # abrir archivo a analizar
     with open("practica.asm") as archivo:
+
         # Variable de estado para controlar si estamos dentro del segmento .data
         type_segment = 0  # Variable para detectar el tipo de segmento
         lineNumber = 0  # Contador de linea
@@ -16,17 +19,21 @@ def show():
             linea = linea.strip()  # Eliminar los saltos de linea
             lineNumber += 1  # Incrementando linea
 
-            if re.findall(r'\.data', linea):  # busca si en la linea esta la etiqueta .data
+            # busca si en la linea esta la etiqueta .data
+            if re.findall(r'\.data', linea, re.IGNORECASE):
                 type_segment = 1
 
-            if re.findall(r'\.code', linea):  # busca si en la linea esta la etiqueta .code
+            # busca si en la linea esta la etiqueta .code
+            if re.findall(r'\.code', linea, re.IGNORECASE):
                 type_segment = 2
 
-            if type_segment == 1 and ".data" not in linea:
+            # determina si se ha encontrado .data y ya esta en la siguiente linea
+            if type_segment == 1 and not re.findall(r'\.data', linea, re.IGNORECASE):
                 getDataSegment(linea)  # Funcion para mostrar en ventana
                 syntaxAnalysis(linea, type_segment, lineNumber)
 
-            if type_segment == 2 and ".code" not in linea:
+            # determina si se ha encontrado .code y ya esta en la siguiente linea
+            if type_segment == 2 and not re.findall(r'\.code', linea, re.IGNORECASE):
                 getCodeSegment(linea)  # Funcion para mostrar en ventana
                 syntaxAnalysis(linea, type_segment, lineNumber)
 

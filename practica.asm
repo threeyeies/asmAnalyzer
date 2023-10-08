@@ -5,7 +5,7 @@
 .stack 4096
 ExitProcess proto,dwExitCode:dword
 
-.data
+.DATA
 sum DWORD ?
 suma DWORD 12
 
