@@ -1,3 +1,6 @@
+'''Script que hace análisis por linea detectando data segment y codesegment, también es el main del
+analisis PARSE'''
+
 import re  # biblioteca regular expression
 import syntan  # Importando syntax analysis
 
@@ -100,13 +103,12 @@ def main():
     global lineStates
     show()
 
-    # linea con fines de comprobacion en consola, borrar para entrega final
+    # implementar como indicador de errores en la GUI
     incorrectLines = [line for line, state in lineStates if not state]
     if not incorrectLines:
         print("El código es correcto.")
     else:
         print("El código es incorrecto en las líneas:", incorrectLines)
-    # hasta aquí
 
 
 if __name__ == "__main__":
