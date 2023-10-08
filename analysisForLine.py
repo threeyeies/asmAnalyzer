@@ -3,7 +3,6 @@ import syntan  # Importando syntax analysis
 
 lineStates = []  # Lista para guardar (linea,estado)
 state = False  # Variable solo para debugear en consola y ver si ya detecta como correcto las instrucciones
-# Quitar en la entrega final
 
 
 def show():
@@ -59,41 +58,55 @@ def syntaxAnalysis(linea, type_segment, lineNumber):
         if resultado:
             instruccion, operando1, operando2 = resultado  # Desmpaquetado en variables
             lineStates.append((lineNumber, True))
+
+            # borrar desde aquí en entrega final, solo con fines de comprbacion en consola
             state = True
             print(
                 f'instruccion: {instruccion}, operando1: {operando1}, operando2: {operando2}')
             print(state)
+            # ... hasta aquí
 
         else:
             lineStates.append((lineNumber, False))
+
+            # borrar desde aquí en entrega final, solo con fines de comprbacion en consola
             state = False
             print(state)
+            # ... hasta aquí
 
     if type_segment == 2:
         resultado = syntan.analizar_lineaCodeSegment(linea)
         if resultado:
             instruccion, operando1, operando2 = resultado  # Desepaquetado en variables
             lineStates.append((lineNumber, True))
+
+            # desde aquí borrar en entrega final, solo con fines de comprbacion en consola
             state = True
             print(
                 f'instruccion: {instruccion}, operando1: {operando1}, operando2: {operando2}')
             print(state)
+            # ...hasta aqui
 
         else:
             lineStates.append((lineNumber, False))
+
+            # borrar desde aquí en entrega final, solo con fines de comprbacion en consola
             state = False
             print(state)
+            # ... hasta aquí
 
 
 def main():
     global lineStates
     show()
 
+    # linea con fines de comprobacion en consola, borrar para entrega final
     incorrectLines = [line for line, state in lineStates if not state]
     if not incorrectLines:
         print("El código es correcto.")
     else:
         print("El código es incorrecto en las líneas:", incorrectLines)
+    # hasta aquí
 
 
 if __name__ == "__main__":

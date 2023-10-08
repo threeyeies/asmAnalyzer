@@ -19,6 +19,8 @@ main proc
     add eax,ecx
     sub eax,ebx
     sub eax,3
+    add eax,1
+    div eax,2
     invoke ExitProcess, 0
 
 main endp

@@ -1,5 +1,5 @@
 
-# lexic analysis: diccionarios
+# lexic analysis: diccionarios de palabras reservadas
 
 # Diccionario para mnemónicos de instrucción
 MNEMONICS = {
@@ -27,6 +27,7 @@ MNEMONICS = {
 # Diccionario para directivas
 DIRECTIVES = {
     'SEGMENT': 'SEGMENT',
+    'END': 'END',
     'ENDS': 'ENDS',
     'ENDP': 'ENDP',
     'ORG': 'ORG',
@@ -48,6 +49,11 @@ DIRECTIVES = {
     'EXTERN': 'EXTERN',
     'PUBLIC': 'PUBLIC',
 
+}
+
+MACROS_AND_FUNTIONS = {
+    'invoke': 'invoke',
+    'ExitProcess': 'ExitProcess'
 }
 
 # Diccionario para registros
