@@ -7,10 +7,14 @@ import syntan  # Importando syntax analysis
 lineStates = []  # Lista para guardar (linea,estado)
 state = False  # Variable solo para debugear en consola y ver si ya detecta como correcto las instrucciones
 
+type_segment = 0  # Variable para detectar el tipo de segmento
+lineNumber = 0  # Contador de linea
 
-def show():
 
-    # abrir archivo a analizar
+def show(linea):
+    global type_segment
+    global lineNumber
+    '''# abrir archivo a analizar
     with open("practica.asm") as archivo:
 
         # Variable de estado para controlar si estamos dentro del segmento .data
@@ -38,14 +42,39 @@ def show():
             if type_segment == 2 and not re.findall(r'\.code', linea, re.IGNORECASE):
                 getCodeSegment(linea)  # Funcion para mostrar en ventana
                 syntaxAnalysis(linea, type_segment, lineNumber)
+'''
+
+    linea = linea.strip()  # Eliminar los saltos de linea
+    lineNumber += 1  # Incrementando linea
+    # busca si en la linea esta la etiqueta .data
+    if re.findall(r'\.data', linea, re.IGNORECASE):
+        type_segment = 1
+
+    # busca si en la linea esta la etiqueta .code
+    if re.findall(r'\.code', linea, re.IGNORECASE):
+        type_segment = 2
+
+    # determina si se ha encontrado .data y ya esta en la siguiente linea
+    if type_segment == 1 and not re.findall(r'\.data', linea, re.IGNORECASE):
+        getDataSegment(linea, type_segment)  # Funcion para mostrar en ventana
+        syntaxAnalysis(linea, type_segment, lineNumber)
+
+    # determina si se ha encontrado .code y ya esta en la siguiente linea
+    if type_segment == 2 and not re.findall(r'\.code', linea, re.IGNORECASE):
+        getCodeSegment(linea, type_segment)  # Funcion para mostrar en ventana
+        syntaxAnalysis(linea, type_segment, lineNumber)
+
+    return (linea, type_segment)
 
 
-def getDataSegment(linea):
-    print(linea, end="")  # sustuir para que se muestre en ventana
+def getDataSegment(linea, type_segment):
+    # print(linea, end="")  # sustuir para que se muestre en ventana
+    return (linea, type_segment)
 
 
-def getCodeSegment(linea):
-    print(linea, end="")  # sustituir para que se muestre en ventana
+def getCodeSegment(linea, type_segment):
+    # print(linea, end="")  # sustituir para que se muestre en ventana
+    return (linea, type_segment)
 
 
 # funcion donde se hará el analisis parse
@@ -99,7 +128,7 @@ def syntaxAnalysis(linea, type_segment, lineNumber):
             # ... hasta aquí
 
 
-def main():
+'''def main():
     global lineStates
     show()
 
@@ -112,4 +141,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main()'''
