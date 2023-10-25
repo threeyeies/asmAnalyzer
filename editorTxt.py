@@ -71,12 +71,16 @@ def openFile():
             statusBar.config(text="Archivo abierto...")
 
             # pasando cada linea al analysisForLine
+            text_dataSegment.configure(state='normal')
+            text_codeSegment.configure(state='normal')
             for linea in contenido.split('\n'):
                 lineaAnalizada, type_segment = show(linea)
                 if type_segment == 1:
-                    text_dataSegment.insert(END, "hola")
+                    text_dataSegment.insert(END, lineaAnalizada + '\n')
                 elif type_segment == 2:
-                    text_codeSegment.insert(END, "hola2")
+                    text_codeSegment.insert(END, lineaAnalizada + '\n')
+            text_dataSegment.configure(state='disable')
+            text_codeSegment.configure(state='disable')
 
 
 def saveFile():
@@ -180,10 +184,26 @@ sentencias.grid(row=0, column=0, sticky='nsew')
 
 dataSegment = Frame(verificadores)
 dataSegment.grid(row=1, column=0, sticky='nsew')
+scrollBards = Scrollbar(dataSegment)
+scrollBards.pack(side=RIGHT, fill=Y)
+hScrollds = Scrollbar(dataSegment, orient="horizontal")
+hScrollds.pack(side=BOTTOM, fill=X)
+text_dataSegment = Text(dataSegment, width=97, height=25, font=("Courier", 14), undo=True, yscrollcommand=scrollBards.set, wrap="none",
+                        xscrollcommand=hScrollds.set)
+scrollBards.config(command=text_dataSegment.yview)
+hScrollds.config(command=text_dataSegment.xview)
+
 
 codeSegment = Frame(verificadores)
 codeSegment.grid(row=2, column=0, sticky='nsew')
-
+scrollBarcs = Scrollbar(codeSegment)
+scrollBar.pack(side=RIGHT, fill=Y)
+hScrollcs = Scrollbar(codeSegment, orient="horizontal")
+hScrollcs.pack(side=BOTTOM, fill=X)
+text_codeSegment = Text(codeSegment, width=97, height=25, font=("Courier", 14), undo=True, yscrollcommand=scrollBarcs.set, wrap="none",
+                        xscrollcommand=hScrollcs.set)
+scrollBarcs.config(command=text_codeSegment.yview)
+hScrollcs.config(command=text_codeSegment.xview)
 
 # Instancia del menu y agregación de comandos
 
