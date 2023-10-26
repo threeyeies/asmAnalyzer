@@ -1,4 +1,3 @@
-
 # lexic analysis: diccionarios de palabras reservadas
 
 # Diccionario para mnemónicos de instrucción

@@ -4,7 +4,8 @@ from tkinter import ttk
 from screeninfo import get_monitors
 from tkinter import font
 from ttkthemes import ThemedTk
-from analysisForLine import show
+from analysisForLine import show, lexemeAnalysis
+import re
 
 # Cambiar el directorio de acceso para uno de Windows
 # Cambiar el tipo de archivos de abre de txt a asm}
@@ -70,17 +71,29 @@ def openFile():
             textBox.insert(END, contenido)
             statusBar.config(text="Archivo abierto...")
 
-            # pasando cada linea al analysisForLine
+            # habilando contenedores
             text_dataSegment.configure(state='normal')
             text_codeSegment.configure(state='normal')
+            text_sentencias.configure(state='normal')
             for linea in contenido.split('\n'):
+                # pasando cada linea al metodo show de analysisForLine.py y guardando los returns en estas cuatro variables
                 lineaAnalizada, type_segment = show(linea)
                 if type_segment == 1:
                     text_dataSegment.insert(END, lineaAnalizada + '\n')
                 elif type_segment == 2:
                     text_codeSegment.insert(END, lineaAnalizada + '\n')
+
+                # Para cada linea separar en palabras cuando encuentre espacios, comas, dos puntos y punto
+                for palabra in re.split(r'[ ,:.]', linea):
+
+                    # pasando cada palabra al metodo lexemeAnalysis en analisysForLine.py
+                    lexema, comprobable = lexemeAnalysis(palabra)
+                    text_sentencias.insert(
+                        END, lexema + '\t' + comprobable + '\n')
+
             text_dataSegment.configure(state='disable')
             text_codeSegment.configure(state='disable')
+            text_sentencias.configure(state='disable')
 
 
 def saveFile():
@@ -184,26 +197,10 @@ sentencias.grid(row=0, column=0, sticky='nsew')
 
 dataSegment = Frame(verificadores)
 dataSegment.grid(row=1, column=0, sticky='nsew')
-scrollBards = Scrollbar(dataSegment)
-scrollBards.pack(side=RIGHT, fill=Y)
-hScrollds = Scrollbar(dataSegment, orient="horizontal")
-hScrollds.pack(side=BOTTOM, fill=X)
-text_dataSegment = Text(dataSegment, width=97, height=25, font=("Courier", 14), undo=True, yscrollcommand=scrollBards.set, wrap="none",
-                        xscrollcommand=hScrollds.set)
-scrollBards.config(command=text_dataSegment.yview)
-hScrollds.config(command=text_dataSegment.xview)
-
 
 codeSegment = Frame(verificadores)
 codeSegment.grid(row=2, column=0, sticky='nsew')
-scrollBarcs = Scrollbar(codeSegment)
-scrollBar.pack(side=RIGHT, fill=Y)
-hScrollcs = Scrollbar(codeSegment, orient="horizontal")
-hScrollcs.pack(side=BOTTOM, fill=X)
-text_codeSegment = Text(codeSegment, width=97, height=25, font=("Courier", 14), undo=True, yscrollcommand=scrollBarcs.set, wrap="none",
-                        xscrollcommand=hScrollcs.set)
-scrollBarcs.config(command=text_codeSegment.yview)
-hScrollcs.config(command=text_codeSegment.xview)
+
 
 # Instancia del menu y agregación de comandos
 
