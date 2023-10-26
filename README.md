@@ -15,3 +15,9 @@ Se han implementado varias cosas, falta implementar para reconocer:
 				
 			L1: mov ax,bx
             L2: mov ax,cx
+
+
+
+Pendientes de GUI:
+
+    ScrollBars en los otros tres frames: sentencias, dataSegment y codeSegment
