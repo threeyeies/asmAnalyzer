@@ -3,6 +3,7 @@ analisis PARSE'''
 
 import re  # biblioteca regular expression
 import syntan  # Importando syntax analysis
+import lexemean
 
 lineStates = []  # Lista para guardar (linea,estado)
 state = False  # Variable solo para debugear en consola y ver si ya detecta como correcto las instrucciones
@@ -14,6 +15,8 @@ lineNumber = 0  # Contador de linea
 def show(linea):
     global type_segment
     global lineNumber
+    lexema = ''
+    comprobable = ''
 
     linea = linea.strip()  # Eliminar los saltos de linea
     lineNumber += 1  # Incrementando linea
@@ -27,12 +30,12 @@ def show(linea):
 
     # determina si se ha encontrado .data y ya esta en la siguiente linea
     if type_segment == 1 and not re.findall(r'\.data', linea, re.IGNORECASE):
-        getDataSegment(linea, type_segment)  # Funcion para mostrar en ventana
+        getDataSegment(linea, type_segment)
         syntaxAnalysis(linea, type_segment, lineNumber)
 
     # determina si se ha encontrado .code y ya esta en la siguiente linea
     if type_segment == 2 and not re.findall(r'\.code', linea, re.IGNORECASE):
-        getCodeSegment(linea, type_segment)  # Funcion para mostrar en ventana
+        getCodeSegment(linea, type_segment)
         syntaxAnalysis(linea, type_segment, lineNumber)
 
     return (linea, type_segment)
@@ -62,20 +65,21 @@ def syntaxAnalysis(linea, type_segment, lineNumber):
             instruccion, operando1, operando2 = resultado  # Desmpaquetado en variables
             lineStates.append((lineNumber, True))
 
-            # borrar desde aquí en entrega final, solo con fines de comprbacion en consola
+            '''# borrar desde aquí en entrega final, solo con fines de comprbacion en consola
             state = True
             print(
                 f'instruccion: {instruccion}, operando1: {operando1}, operando2: {operando2}')
             print(state)
-            # ... hasta aquí
+            # ... hasta aquí'''
 
         else:
             lineStates.append((lineNumber, False))
 
-            # borrar desde aquí en entrega final, solo con fines de comprbacion en consola
+            '''
+           # borrar desde aquí en entrega final, solo con fines de comprbacion en consola
             state = False
             print(state)
-            # ... hasta aquí
+            # ... hasta aquí '''
 
     if type_segment == 2:
         resultado = syntan.analizar_lineaCodeSegment(linea)
@@ -83,20 +87,41 @@ def syntaxAnalysis(linea, type_segment, lineNumber):
             instruccion, operando1, operando2 = resultado  # Desepaquetado en variables
             lineStates.append((lineNumber, True))
 
-            # desde aquí borrar en entrega final, solo con fines de comprbacion en consola
+            '''# desde aquí borrar en entrega final, solo con fines de comprbacion en consola
             state = True
             print(
                 f'instruccion: {instruccion}, operando1: {operando1}, operando2: {operando2}')
             print(state)
-            # ...hasta aqui
+            # ...hasta aqui'''
 
         else:
             lineStates.append((lineNumber, False))
 
-            # borrar desde aquí en entrega final, solo con fines de comprbacion en consola
+            '''# borrar desde aquí en entrega final, solo con fines de comprbacion en consola
             state = False
             print(state)
-            # ... hasta aquí
+            # ... hasta aquí'''
+
+
+# Función para analizar los lexemas
+def lexemeAnalysis(linea):
+    lexema = ''
+    comprobable = ''
+
+    if not linea:
+        return ('', '')
+
+    for palabra in linea.split():
+        resultado = lexemean.lexemaAnalysis(palabra)
+        if resultado is not None:
+            palab, comprobable = resultado
+            print(f'Lexema: {palab} \t {comprobable}')
+            return palab, comprobable
+
+        else:
+            return ('', '')
+
+    return (palab, comprobable)
 
 
 '''def main():
