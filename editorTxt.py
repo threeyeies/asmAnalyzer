@@ -21,7 +21,7 @@ monitor = get_monitors()[0]
 ancho_ventana = monitor.width // 2
 alto_ventana = monitor.height // 2
 root.geometry(f"{ancho_ventana}x{alto_ventana}")  # Dimensiones ventana
-root.iconbitmap("Akane.ico")  # Icono
+#root.iconbitmap("Akane.ico")  # Icono
 root.configure(bg="#202020")  # Fondo de estilo "cyberpunk"
 
 # Crear un estilo personalizado para los widgets
@@ -201,7 +201,6 @@ dataSegment.grid(row=1, column=0, sticky='nsew')
 codeSegment = Frame(verificadores)
 codeSegment.grid(row=2, column=0, sticky='nsew')
 
-
 # Instancia del menu y agregación de comandos
 
 myMenu = Menu(root)
@@ -239,29 +238,58 @@ root.bind('<Control-Key-v>', pasteText)
 statusBar = Label(root, text="Listo...", anchor=W)
 statusBar.grid(row=3, column=0, columnspan=4, sticky='nsew')
 
+#Scrollbars de los cuadros de texto de los verificadores
+
+scrollBar_sentencias = Scrollbar(sentencias)
+scrollBar_sentencias.pack(side=RIGHT, fill=Y)
+
+hscrollbar_sentencias = Scrollbar(sentencias, orient=HORIZONTAL)
+hscrollbar_sentencias.pack(side=BOTTOM, fill=X)
+
+scrollbar_dataSegment = Scrollbar(dataSegment, orient=VERTICAL)
+scrollbar_dataSegment.pack(side=RIGHT, fill=Y)
+
+hscrollbar_dataSegment = Scrollbar(dataSegment, orient=HORIZONTAL)
+hscrollbar_dataSegment.pack(side=BOTTOM, fill=X)
+
+scrollbar_codeSegment = Scrollbar(codeSegment, orient=VERTICAL)
+scrollbar_codeSegment.pack(side=RIGHT, fill=Y)
+
+hscrollbar_codeSegment = Scrollbar(codeSegment, orient=HORIZONTAL)
+hscrollbar_codeSegment.pack(side=BOTTOM, fill=X)
+
 # Instancia de secciones
 
-Label(sentencias, text="Verificador de sentencias").pack(
-    fill='both', expand=True)
+Label(sentencias, text="Verificador de sentencias").pack(fill='both', expand=True)
 
 # Crear un cuadro de texto no editable debajo de la etiqueta en sentencias
-text_sentencias = Text(sentencias, wrap=NONE,
-                       state='disabled', width=97, height=10)
+text_sentencias = Text(sentencias, yscrollcommand=scrollBar_sentencias.set ,wrap=NONE,xscrollcommand=hscrollbar_sentencias.set,state='disabled', width=97, height=10)
 text_sentencias.pack(fill='both', expand=True)
 
 Label(dataSegment, text="Data Segment").pack(fill='both', expand=True)
 
 # Crear un cuadro de texto no editable debajo de la etiqueta en dataSegment
-text_dataSegment = Text(dataSegment, wrap=NONE,
-                        state='disabled', width=97, height=10)
+text_dataSegment = Text(dataSegment,yscrollcommand=scrollbar_dataSegment.set ,wrap=NONE, xscrollcommand=hscrollbar_dataSegment.set,state='disabled', width=97, height=10)
 text_dataSegment.pack(fill='both', expand=True)
 
 Label(codeSegment, text="Code segment").pack(fill='both', expand=True)
 
 # Crear un cuadro de texto no editable debajo de la etiqueta en codeSegment
-text_codeSegment = Text(codeSegment, wrap=NONE,
-                        state='disabled', width=97, height=10)
+text_codeSegment = Text(codeSegment, yscrollcommand=scrollbar_codeSegment.set ,wrap=NONE, xscrollcommand=hscrollbar_codeSegment.set,state='disabled', width=97, height=10)
 text_codeSegment.pack(fill='both', expand=True)
+
+
+
+scrollBar_sentencias.config(command=text_sentencias.yview)
+hscrollbar_sentencias.config(command=text_sentencias.xview)
+
+scrollbar_dataSegment.config(command=text_dataSegment.yview)
+hscrollbar_dataSegment.config(command=text_dataSegment.xview)
+
+scrollbar_codeSegment.config(command=text_codeSegment.yview)
+hscrollbar_codeSegment.config(command=text_codeSegment.xview)
+
+
 
 # Configuración de geometría de las filas y columnas para hacerlas proporcionales
 root.grid_rowconfigure(0, weight=1)
