@@ -104,24 +104,24 @@ def syntaxAnalysis(linea, type_segment, lineNumber):
 
 
 # Función para analizar los lexemas
-def lexemeAnalysis(linea):
+def lexemeAnalysis(linea, isString):
     lexema = ''
     comprobable = ''
-
+    
     if not linea:
         return ('', '')
 
     for palabra in linea.split():
-        resultado = lexemean.lexemaAnalysis(palabra)
+        resultado = lexemean.lexemaAnalysis(palabra, isString)
         if resultado is not None:
-            palab, comprobable = resultado
+            palab, isString,comprobable = resultado
             print(f'Lexema: {palab} \t {comprobable}')
-            return palab, comprobable
+            return palab, isString, comprobable,
 
         else:
             return ('', '')
 
-    return (palab, comprobable)
+    return (palab, isString, comprobable)
 
 
 '''def main():

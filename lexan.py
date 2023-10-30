@@ -1,5 +1,6 @@
 # lexic analysis: diccionarios de palabras reservadas
 
+
 # Diccionario para mnemónicos de instrucción
 MNEMONICS = {
     'MOV': 'MOV',
@@ -25,8 +26,8 @@ MNEMONICS = {
 
 # Diccionario para directivas
 DIRECTIVES = {
-    'SEGMENT': 'SEGMENT',
-    'END': 'END',
+    '.SEGMENT': '.SEGMENT',
+    '.END': '.END',
     'ENDS': 'ENDS',
     'ENDP': 'ENDP',
     'ORG': 'ORG',
@@ -34,20 +35,27 @@ DIRECTIVES = {
     'DW': 'DW',
     'DD': 'DD',
     'DT': 'DT',
+    'DQ': 'DQ',
     'INCLUDE': 'INCLUDE',
     'EQU': 'EQU',
-    'DATA': 'DATA',
-    'CODE': 'CODE',
+    '.DATA': '.DATA',
+    '.CODE': '.CODE',
     'BYTE': 'BYTE',
     'WORD': 'WORD',
     'DWORD': 'DWORD',
-    'END': 'END',
-    'PROC': 'PROC',
+    '.END': '.END',
+    '.PROC': '.PROC',
     'PTR': 'PTR',
     'OFFSET': 'OFFSET',
     'EXTERN': 'EXTERN',
     'PUBLIC': 'PUBLIC',
-
+    '.386':'.386',
+    '.STACK':'.STACK',
+    '.MODEL':'.MODEL',
+    '.CONST':'.CONST',
+    'FLAT':'FLAT',
+    'STDCALL':'STDCALL',
+    '4096':'4096',
 }
 
 MACROS_AND_FUNTIONS = {
@@ -72,20 +80,26 @@ REGISTERS = {
 INT_CONSTANTS = {
     'hex': 'h',
     'oct1': 'q',
+    'oct2': 'o',
     'dec': 'd',
     'bin': 'b',
-    'r': 'r',
-    't': 't',
-    'y': 'y'
+    'real encoded': 'r',
+    'alternative dec': 't',
+    'alternative bin': 'y'
 
 }
 
 
 # Diccionario para etiquetas
 LABELS = {
-    'var1': 'var1',
     'loop_start': 'loop_start',
     'data_section': 'data_section',
     'code_section': 'code_section',
-
+    'main': 'main',
+    'end':'end',
+    'proc':'proc',
+    ':': ':',
 }
+
+
+

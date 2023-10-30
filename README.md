@@ -1,11 +1,11 @@
-Se han agregado diccionarios de palabras reservadas del MASM
-Los diccionarios se utilizan en la definicion de expresiones regulares
-Se han implementado varias cosas, falta implementar para reconocer:
+Se han agregado diccionarios de palabras reservadas del MASM 
+Los diccionarios se utilizan en la definicion de expresiones regulares 
+Se han implementado varias cosas, falta implementar para reconocer: 
 
-    Constantes nuemericas enteras y reales
-    Constantes tipo cadena con "" y ''
-    Comentarios en asm
-    Etiquetas de código: 
+    Constantes nuemericas enteras y reales [COMPLETADO]
+    Constantes tipo cadena con "" y '' [COMPLETADO]
+    Comentarios en asm [COMPLETADO]
+    Etiquetas de código:  [COMPLETADO]
     		Ej
 			
 			destino:
@@ -16,8 +16,6 @@ Se han implementado varias cosas, falta implementar para reconocer:
 			L1: mov ax,bx
             L2: mov ax,cx
 
+GUI scroll bars [COMPLETADO]
 
-
-Pendientes de GUI:
-
-    ScrollBars en los otros tres frames: sentencias, dataSegment y codeSegment
+Para que el icono se pueda ver debe estar una carpeta fuera de donde esta todos estos scripts
