@@ -35,6 +35,7 @@ global statusName
 
 global lineaAnalizada
 
+
 type_segment = 0
 statusName = False
 
@@ -67,6 +68,7 @@ def openFile():
         statusName = textFile
 
         with open(textFile, 'r') as file:
+            global contenido 
             contenido = file.read()
             textBox.insert(END, contenido)
             statusBar.config(text="Archivo abierto...")
@@ -75,6 +77,7 @@ def openFile():
             text_dataSegment.configure(state='normal')
             text_codeSegment.configure(state='normal')
             text_sentencias.configure(state='normal')
+
             for linea in contenido.split('\n'):
                 # pasando cada linea al metodo show de analysisForLine.py y guardando los returns en estas cuatro variables
                 lineaAnalizada, type_segment, lineNumber = show(linea)
@@ -240,7 +243,89 @@ def on_content_change(event=None):
     # Esta función se llamará cada vez que el contenido del cuadro de texto cambie
     # Obtener todo el contenido del Text
     content = textBox.get("1.0", "end-1c")
-    print("Contenido modificado:", content)
+    #print("Contenido modificado:", content)
+
+    text_dataSegment.configure(state='normal')
+    text_codeSegment.configure(state='normal')
+    text_sentencias.configure(state='normal')
+    text_bien.configure(state='normal')
+
+    text_dataSegment.delete("1.0", END)
+    text_codeSegment.delete("1.0", END)
+    text_sentencias.delete("1.0", END)
+    text_bien.delete("1.0", END)
+
+
+    for linea in content.split('\n'):
+        # pasando cada linea al metodo show de analysisForLine.py y guardando los returns en estas cuatro variables
+        lineaAnalizada, type_segment, lineNumber = show(linea)
+
+        incorrectLines = [line for line,
+                                  state in lineStates if not state]
+        if not incorrectLines:
+            print("El código es correcto.")
+        else:
+            print("El código es incorrecto en las líneas:", incorrectLines)
+
+        if type_segment == 1:
+            text_dataSegment.insert(END, lineaAnalizada + '\n')
+        elif type_segment == 2:
+            text_codeSegment.insert(END, lineaAnalizada + '\n')
+
+        isString = False
+        stringConstant = ''
+
+        # Para cada linea separar en palabras cuando encuentre espacios, comas, dos puntos y punto
+        for palabra in re.split(r'[ ,]', linea):
+
+        # Comprobando si la línea está en blanco (sin caracteres visibles)
+            if not palabra.strip():
+                continue
+            # pasando cada palabra al metodo lexemeAnalysis en analisysForLine.py
+            lexema, isString, comprobable = lexemeAnalysis(
+                palabra, isString)
+            # Comprobando si es un comentario
+            if comprobable == 'COMMENT':
+                text_sentencias.insert(
+                    END, linea + '\t' + comprobable + '\n')
+                break
+            # Comprueba si una directiva empieza con '.', si es asi todo lo de adelante sera contado como directiva
+            if comprobable == '.DIRECTIVES':
+                text_sentencias.insert(
+                    END, linea + '\t' + 'DIRECTIVES' + '\n')
+                break
+
+            # Comprueba si una macro o una función, si es asi todo lo de adelante es una macro o función
+            if comprobable == 'MACROS_AND_FUNCTIONS':
+                text_sentencias.insert(
+                    END, linea + '\t' + comprobable + '\n')
+                break
+
+            # Comprobando si es una cadena, la primera vez que reciba STRING_CONSTANT, volvera isString = True, por lo que cada palabra siguiente la agregara
+            # a una lista para cuando vuelva a recibir STRING_CONSTANT cierre la cadena (isString = False) e imprima la lista con la cadena completa
+            if comprobable == "STRING_CONSTANT":
+                if isString == True:
+                    stringConstant = stringConstant + lexema + '\t'
+                    continue
+                if isString == False:
+                    stringConstant = stringConstant + lexema + '\t'
+                    text_sentencias.insert(
+                        END, stringConstant + comprobable + '\n')
+                    stringConstant = ''
+                    continue
+            if isString == True:
+                stringConstant = stringConstant + lexema + '\t'
+                continue
+
+            # Insertando palabra
+            text_sentencias.insert(
+                END, lexema + '\t' + comprobable + '\n')
+
+    text_dataSegment.configure(state='disable')
+    text_codeSegment.configure(state='disable')
+    text_sentencias.configure(state='disable')
+
+ 
 
 
 # Frame izquierdo (Editor)
@@ -371,6 +456,7 @@ Label(bien, text="'Ta Bien").pack(fill='both', expand=True)
 
 text_bien = Text(bien, yscrollcommand=scrollbar_bien.set ,wrap=NONE,xscrollcommand=hScrollbar_bien.set,state='disabled', width=97, height=10)
 text_bien.pack(fill='both', expand=True)
+
 
 
 scrollBar_sentencias.config(command=text_sentencias.yview)
