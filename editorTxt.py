@@ -21,7 +21,7 @@ monitor = get_monitors()[0]
 ancho_ventana = monitor.width // 2
 alto_ventana = monitor.height // 2
 root.geometry(f"{ancho_ventana}x{alto_ventana}")  # Dimensiones ventana
-root.iconbitmap("Akane.ico")  # Icono
+# root.iconbitmap("Akane.ico")  # Icono
 root.configure(bg="#202020")  # Fondo de estilo "cyberpunk"
 
 # Crear un estilo personalizado para los widgets
@@ -55,7 +55,7 @@ def openFile():
     textBox.delete("1.0", END)
 
     textFile = filedialog.askopenfilename(
-        initialdir="/home/danielperez/Documents/Textos",
+        initialdir="/home/danielperez/Documents",
         title="Abrir archivo",
         filetypes=(("Archivos de ensamblador", "*.asm"),
                    ("Archivos de texto", "*.txt"))
@@ -179,6 +179,23 @@ def closeFile():
 
     textBox.delete("1.0", END)
     textBox.configure(state='disabled')
+
+    text_sentencias.configure(state='normal')
+    text_sentencias.delete("1.0", END)
+    text_sentencias.configure(state='disabled')
+
+    text_codeSegment.configure(state='normal')
+    text_codeSegment.delete("1.0", END)
+    text_codeSegment.configure(state='disabled')
+
+    text_dataSegment.configure(state='normal')
+    text_dataSegment.delete("1.0", END)
+    text_dataSegment.configure(state='disabled')
+
+    text_bien.configure(state='normal')
+    text_bien.delete("1.0", END)
+    text_bien.configure(state='disabled')
+
     statusBar.config(text="Archivo cerrado...")
 
 
@@ -219,6 +236,13 @@ def copyText(e):
             root.clipboard_append(selected)
 
 
+def on_content_change(event=None):
+    # Esta función se llamará cada vez que el contenido del cuadro de texto cambie
+    # Obtener todo el contenido del Text
+    content = textBox.get("1.0", "end-1c")
+    print("Contenido modificado:", content)
+
+
 # Frame izquierdo (Editor)
 editor = Frame(root)
 editor.grid(row=0, column=0, rowspan=3, columnspan=3, sticky='nsew')
@@ -233,6 +257,8 @@ textBox = Text(editor, width=97, height=25, font=("Courier", 14), undo=True, ysc
                xscrollcommand=hScroll.set)
 textBox.configure(state='disabled')
 textBox.pack(fill='both', expand=True)
+
+textBox.bind("<KeyRelease>", on_content_change)
 
 scrollBar.config(command=textBox.yview)
 hScroll.config(command=textBox.xview)
@@ -250,6 +276,9 @@ dataSegment.grid(row=1, column=0, sticky='nsew')
 
 codeSegment = Frame(verificadores)
 codeSegment.grid(row=2, column=0, sticky='nsew')
+
+bien = Frame(verificadores)
+bien.grid(row=3, column=0, sticky='nsew')
 
 # Instancia del menu y agregación de comandos
 
@@ -308,6 +337,12 @@ scrollbar_codeSegment.pack(side=RIGHT, fill=Y)
 hscrollbar_codeSegment = Scrollbar(codeSegment, orient=HORIZONTAL)
 hscrollbar_codeSegment.pack(side=BOTTOM, fill=X)
 
+hScrollbar_bien = Scrollbar(bien, orient=HORIZONTAL)
+hScrollbar_bien.pack(side=BOTTOM, fill=X)
+
+scrollbar_bien = Scrollbar(bien, orient=VERTICAL)
+scrollbar_bien.pack(side=RIGHT, fill=Y)
+
 # Instancia de secciones
 
 Label(sentencias, text="Verificador de sentencias").pack(
@@ -332,6 +367,12 @@ text_codeSegment = Text(codeSegment, yscrollcommand=scrollbar_codeSegment.set, w
                         xscrollcommand=hscrollbar_codeSegment.set, state='disabled', width=97, height=10)
 text_codeSegment.pack(fill='both', expand=True)
 
+Label(bien, text="'Ta Bien").pack(fill='both', expand=True)
+
+text_bien = Text(bien, yscrollcommand=scrollbar_bien.set, wrap=NONE,
+                 xscrollcommand=hScrollbar_bien.set, state='disabled', width=97, height=10)
+text_bien.pack(fill='both', expand=True)
+
 
 scrollBar_sentencias.config(command=text_sentencias.yview)
 hscrollbar_sentencias.config(command=text_sentencias.xview)
@@ -341,6 +382,9 @@ hscrollbar_dataSegment.config(command=text_dataSegment.xview)
 
 scrollbar_codeSegment.config(command=text_codeSegment.yview)
 hscrollbar_codeSegment.config(command=text_codeSegment.xview)
+
+hScrollbar_bien.config(command=text_bien.xview)
+scrollbar_bien.config(command=text_bien.yview)
 
 
 # Configuración de geometría de las filas y columnas para hacerlas proporcionales
