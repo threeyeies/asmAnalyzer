@@ -38,7 +38,7 @@ def show(linea):
         getCodeSegment(linea, type_segment)
         syntaxAnalysis(linea, type_segment, lineNumber)
 
-    return (linea, type_segment)
+    return (linea, type_segment, lineNumber)
 
 
 def getDataSegment(linea, type_segment):
@@ -64,9 +64,9 @@ def syntaxAnalysis(linea, type_segment, lineNumber):
         if resultado:
             instruccion, operando1, operando2 = resultado  # Desmpaquetado en variables
             lineStates.append((lineNumber, True))
-
-            '''# borrar desde aquí en entrega final, solo con fines de comprbacion en consola
             state = True
+            '''# borrar desde aquí en entrega final, solo con fines de comprbacion en consola
+            
             print(
                 f'instruccion: {instruccion}, operando1: {operando1}, operando2: {operando2}')
             print(state)
@@ -74,21 +74,22 @@ def syntaxAnalysis(linea, type_segment, lineNumber):
 
         else:
             lineStates.append((lineNumber, False))
-
+            state = False
             '''
            # borrar desde aquí en entrega final, solo con fines de comprbacion en consola
-            state = False
+            
             print(state)
             # ... hasta aquí '''
 
     if type_segment == 2:
         resultado = syntan.analizar_lineaCodeSegment(linea)
+        print(resultado)
         if resultado:
             instruccion, operando1, operando2 = resultado  # Desepaquetado en variables
             lineStates.append((lineNumber, True))
-
-            '''# desde aquí borrar en entrega final, solo con fines de comprbacion en consola
             state = True
+            '''# desde aquí borrar en entrega final, solo con fines de comprbacion en consola
+            
             print(
                 f'instruccion: {instruccion}, operando1: {operando1}, operando2: {operando2}')
             print(state)
@@ -96,9 +97,9 @@ def syntaxAnalysis(linea, type_segment, lineNumber):
 
         else:
             lineStates.append((lineNumber, False))
-
-            '''# borrar desde aquí en entrega final, solo con fines de comprbacion en consola
             state = False
+            '''# borrar desde aquí en entrega final, solo con fines de comprbacion en consola
+            
             print(state)
             # ... hasta aquí'''
 
@@ -107,14 +108,14 @@ def syntaxAnalysis(linea, type_segment, lineNumber):
 def lexemeAnalysis(linea, isString):
     lexema = ''
     comprobable = ''
-    
+
     if not linea:
         return ('', '')
 
     for palabra in linea.split():
         resultado = lexemean.lexemaAnalysis(palabra, isString)
         if resultado is not None:
-            palab, isString,comprobable = resultado
+            palab, isString, comprobable = resultado
             print(f'Lexema: {palab} \t {comprobable}')
             return palab, isString, comprobable,
 

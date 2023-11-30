@@ -10,13 +10,11 @@ MNEMONICS = {
     'IMUL': 'IMUL',
     'IDIV': 'IDIV',
     'DIV': 'DIV',
-    'INC': 'INC',
     'DEC': 'DEC',
     'AND': 'AND',
     'OR': 'OR',
     'XOR': 'XOR',
     'CMP': 'CMP',
-    'JMP': 'JMP',
     'CALL': 'CALL',
     'RET': 'RET',
     'PUSH': 'PUSH',
@@ -49,22 +47,30 @@ DIRECTIVES = {
     'OFFSET': 'OFFSET',
     'EXTERN': 'EXTERN',
     'PUBLIC': 'PUBLIC',
-    '.386':'.386',
-    '.STACK':'.STACK',
-    '.MODEL':'.MODEL',
-    '.CONST':'.CONST',
-    'FLAT':'FLAT',
-    'STDCALL':'STDCALL',
-    '4096':'4096',
+    '.386': '.386',
+    '.STACK': '.STACK',
+    '.MODEL': '.MODEL',
+    '.CONST': '.CONST',
+    'FLAT': 'FLAT',
+    'STDCALL': 'STDCALL',
+    '4096': '4096',
 }
 
 MACROS_AND_FUNTIONS = {
     'invoke': 'invoke',
-    'ExitProcess': 'ExitProcess'
+    'ExitProcess': 'ExitProcess',
+    'main': 'main',
+    'proc': 'proc',
+    'endp': ' endp',
+    'end': 'end'
 }
 
 # Diccionario para registros
 REGISTERS = {
+    'AX': 'AX',
+    'BX': 'BX',
+    'CX': 'CX',
+    'DX': 'DX',
     'EAX': 'EAX',
     'EBX': 'EBX',
     'ECX': 'ECX',
@@ -96,10 +102,7 @@ LABELS = {
     'data_section': 'data_section',
     'code_section': 'code_section',
     'main': 'main',
-    'end':'end',
-    'proc':'proc',
+    'end': 'end',
+    'proc': 'proc',
     ':': ':',
 }
-
-
-

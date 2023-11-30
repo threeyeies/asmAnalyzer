@@ -4,7 +4,7 @@ from tkinter import ttk
 from screeninfo import get_monitors
 from tkinter import font
 from ttkthemes import ThemedTk
-from analysisForLine import show, lexemeAnalysis
+from analysisForLine import show, lexemeAnalysis, lineStates
 import re
 
 # Cambiar el directorio de acceso para uno de Windows
@@ -77,7 +77,15 @@ def openFile():
             text_sentencias.configure(state='normal')
             for linea in contenido.split('\n'):
                 # pasando cada linea al metodo show de analysisForLine.py y guardando los returns en estas cuatro variables
-                lineaAnalizada, type_segment = show(linea)
+                lineaAnalizada, type_segment, lineNumber = show(linea)
+
+                incorrectLines = [line for line,
+                                  state in lineStates if not state]
+                if not incorrectLines:
+                    print("El código es correcto.")
+                else:
+                    print("El código es incorrecto en las líneas:", incorrectLines)
+
                 if type_segment == 1:
                     text_dataSegment.insert(END, lineaAnalizada + '\n')
                 elif type_segment == 2:
@@ -85,37 +93,36 @@ def openFile():
 
                 isString = False
                 stringConstant = ''
-                
+
                 # Para cada linea separar en palabras cuando encuentre espacios, comas, dos puntos y punto
                 for palabra in re.split(r'[ ,]', linea):
-                    
-                    
-                    
+
                     # Comprobando si la línea está en blanco (sin caracteres visibles)
                     if not palabra.strip():
                         continue
-                    
-                    #pasando cada palabra al metodo lexemeAnalysis en analisysForLine.py
-                    lexema, isString, comprobable  = lexemeAnalysis(palabra, isString)
-                    #Comprobando si es un comentario
+
+                    # pasando cada palabra al metodo lexemeAnalysis en analisysForLine.py
+                    lexema, isString, comprobable = lexemeAnalysis(
+                        palabra, isString)
+                    # Comprobando si es un comentario
                     if comprobable == 'COMMENT':
                         text_sentencias.insert(
-                        END, linea + '\t' + comprobable +'\n')
+                            END, linea + '\t' + comprobable + '\n')
                         break
-                    #Comprueba si una directiva empieza con '.', si es asi todo lo de adelante sera contado como directiva 
+                    # Comprueba si una directiva empieza con '.', si es asi todo lo de adelante sera contado como directiva
                     if comprobable == '.DIRECTIVES':
                         text_sentencias.insert(
-                        END, linea + '\t' + 'DIRECTIVES' +'\n')
+                            END, linea + '\t' + 'DIRECTIVES' + '\n')
                         break
-                    
-                    #Comprueba si una macro o una función, si es asi todo lo de adelante es una macro o función
+
+                    # Comprueba si una macro o una función, si es asi todo lo de adelante es una macro o función
                     if comprobable == 'MACROS_AND_FUNCTIONS':
                         text_sentencias.insert(
-                        END, linea + '\t' + comprobable +'\n')
+                            END, linea + '\t' + comprobable + '\n')
                         break
-                    
-                    #Comprobando si es una cadena, la primera vez que reciba STRING_CONSTANT, volvera isString = True, por lo que cada palabra siguiente la agregara
-                    #a una lista para cuando vuelva a recibir STRING_CONSTANT cierre la cadena (isString = False) e imprima la lista con la cadena completa
+
+                    # Comprobando si es una cadena, la primera vez que reciba STRING_CONSTANT, volvera isString = True, por lo que cada palabra siguiente la agregara
+                    # a una lista para cuando vuelva a recibir STRING_CONSTANT cierre la cadena (isString = False) e imprima la lista con la cadena completa
                     if comprobable == "STRING_CONSTANT":
                         if isString == True:
                             stringConstant = stringConstant + lexema + '\t'
@@ -123,20 +130,16 @@ def openFile():
                         if isString == False:
                             stringConstant = stringConstant + lexema + '\t'
                             text_sentencias.insert(
-                            END, stringConstant + comprobable + '\n')
+                                END, stringConstant + comprobable + '\n')
                             stringConstant = ''
                             continue
                     if isString == True:
-                            stringConstant = stringConstant + lexema + '\t'
-                            continue
-                        
-                    #Insertando palabra
+                        stringConstant = stringConstant + lexema + '\t'
+                        continue
+
+                    # Insertando palabra
                     text_sentencias.insert(
                         END, lexema + '\t' + comprobable + '\n')
-                
-               
-   
-                    
 
             text_dataSegment.configure(state='disable')
             text_codeSegment.configure(state='disable')
@@ -285,7 +288,7 @@ root.bind('<Control-Key-v>', pasteText)
 statusBar = Label(root, text="Listo...", anchor=W)
 statusBar.grid(row=3, column=0, columnspan=4, sticky='nsew')
 
-#Scrollbars de los cuadros de texto de los verificadores
+# Scrollbars de los cuadros de texto de los verificadores
 
 scrollBar_sentencias = Scrollbar(sentencias)
 scrollBar_sentencias.pack(side=RIGHT, fill=Y)
@@ -307,24 +310,27 @@ hscrollbar_codeSegment.pack(side=BOTTOM, fill=X)
 
 # Instancia de secciones
 
-Label(sentencias, text="Verificador de sentencias").pack(fill='both', expand=True)
+Label(sentencias, text="Verificador de sentencias").pack(
+    fill='both', expand=True)
 
 # Crear un cuadro de texto no editable debajo de la etiqueta en sentencias
-text_sentencias = Text(sentencias, yscrollcommand=scrollBar_sentencias.set ,wrap=NONE,xscrollcommand=hscrollbar_sentencias.set,state='disabled', width=97, height=10)
+text_sentencias = Text(sentencias, yscrollcommand=scrollBar_sentencias.set, wrap=NONE,
+                       xscrollcommand=hscrollbar_sentencias.set, state='disabled', width=97, height=10)
 text_sentencias.pack(fill='both', expand=True)
 
 Label(dataSegment, text="Data Segment").pack(fill='both', expand=True)
 
 # Crear un cuadro de texto no editable debajo de la etiqueta en dataSegment
-text_dataSegment = Text(dataSegment,yscrollcommand=scrollbar_dataSegment.set ,wrap=NONE, xscrollcommand=hscrollbar_dataSegment.set,state='disabled', width=97, height=10)
+text_dataSegment = Text(dataSegment, yscrollcommand=scrollbar_dataSegment.set, wrap=NONE,
+                        xscrollcommand=hscrollbar_dataSegment.set, state='disabled', width=97, height=10)
 text_dataSegment.pack(fill='both', expand=True)
 
 Label(codeSegment, text="Code segment").pack(fill='both', expand=True)
 
 # Crear un cuadro de texto no editable debajo de la etiqueta en codeSegment
-text_codeSegment = Text(codeSegment, yscrollcommand=scrollbar_codeSegment.set ,wrap=NONE, xscrollcommand=hscrollbar_codeSegment.set,state='disabled', width=97, height=10)
+text_codeSegment = Text(codeSegment, yscrollcommand=scrollbar_codeSegment.set, wrap=NONE,
+                        xscrollcommand=hscrollbar_codeSegment.set, state='disabled', width=97, height=10)
 text_codeSegment.pack(fill='both', expand=True)
-
 
 
 scrollBar_sentencias.config(command=text_sentencias.yview)
@@ -335,7 +341,6 @@ hscrollbar_dataSegment.config(command=text_dataSegment.xview)
 
 scrollbar_codeSegment.config(command=text_codeSegment.yview)
 hscrollbar_codeSegment.config(command=text_codeSegment.xview)
-
 
 
 # Configuración de geometría de las filas y columnas para hacerlas proporcionales
