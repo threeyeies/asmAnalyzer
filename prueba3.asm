@@ -1,5 +1,5 @@
 ; test.ams -- Practica 1: operacion 5+9*7-10*5-3
-; mov neg inc jmp loop
+; instrucciones: mov neg inc jmp loop
 
 .386
 .model flat,stdcall

@@ -21,7 +21,7 @@ monitor = get_monitors()[0]
 ancho_ventana = monitor.width // 2
 alto_ventana = monitor.height // 2
 root.geometry(f"{ancho_ventana}x{alto_ventana}")  # Dimensiones ventana
-# root.iconbitmap("Akane.ico")  # Icono
+#root.iconbitmap("Akane.ico")  # Icono
 root.configure(bg="#202020")  # Fondo de estilo "cyberpunk"
 
 # Crear un estilo personalizado para los widgets
@@ -369,8 +369,7 @@ text_codeSegment.pack(fill='both', expand=True)
 
 Label(bien, text="'Ta Bien").pack(fill='both', expand=True)
 
-text_bien = Text(bien, yscrollcommand=scrollbar_bien.set, wrap=NONE,
-                 xscrollcommand=hScrollbar_bien.set, state='disabled', width=97, height=10)
+text_bien = Text(bien, yscrollcommand=scrollbar_bien.set ,wrap=NONE,xscrollcommand=hScrollbar_bien.set,state='disabled', width=97, height=10)
 text_bien.pack(fill='both', expand=True)
 
 
