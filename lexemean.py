@@ -52,6 +52,15 @@ def lexemaAnalysis(palabra, isString):
             if palabra.casefold() == ';':  # Si se encuentra un comentario
                 return (palabra, isString, 'COMMENT')
             
+            if '.' in palabra and palabra[0].isdigit(): #Si el numero es un real
+                return (palabra, isString, 'REAL_INT_CONSTANTS')
+            
+            if '.' in palabra and palabra[0].casefold() == '-' and palabra[1].isdigit(): #Si el numero es un real negativo
+                return (palabra, isString, 'NEGATIVE_REAL_INT_CONSTANTS')
+            
+            if '.' in palabra and palabra[0].casefold() == '+' and palabra[1].isdigit(): #Si el numero es un real marcado con +
+                return (palabra, isString, 'REAL_INT_CONSTANTS')
+            
             if palabra.isdigit(): #Si es un numero sin sufijo 
                 return (palabra, isString,  'INT_CONSTANTS')
             
@@ -61,14 +70,7 @@ def lexemaAnalysis(palabra, isString):
             if palabra[0].casefold() == '-' and palabra[1].isdigit(): #Si el número es negativo
                 return (palabra, isString, 'NEGATIVE_INT_CONSTANTS')
             
-            if '.' in palabra and palabra[0].isdigit(): #Si el numero es un real
-                return (palabra, isString, 'REAL_INT_CONSTANTS')
-            
-            if '.' in palabra and palabra[0].casefold() == '-' and palabra[1].isdigit(): #Si el numero es un real negativo
-                return (palabra, isString, 'NEGATIVE_REAL_INT_CONSTANTS')
-            
-            if '.' in palabra and palabra[0].casefold() == '+' and palabra[1].isdigit(): #Si el numero es un real marcado con +
-                return (palabra, isString, 'REAL_INT_CONSTANTS')
+           
             
             if (palabra[0].isdigit() and palabra[-1].casefold() == valor.casefold()) or (palabra[0] == '+' and palabra[1].isdigit() and palabra[-1].casefold() == valor.casefold()): # Comprobar si la palabra comienza con un número y termina con el sufijo de una base
                 #Este codigo es para obtener el nombre de la clave que contiene el valor; NOTA: Estoy seguro que no esta optimizado y se puede hacer de manera mas simple pero solo se me ocurrio esta forma jaja
