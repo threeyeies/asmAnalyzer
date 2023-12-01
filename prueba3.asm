@@ -8,6 +8,8 @@ ExitProcess proto,dwExitCode:dword
 
 .DATA
 numero DB 11111111b
+numero DB 11111111b
+
 
 
 
@@ -20,6 +22,7 @@ main proc
 		inc ax
         loop L1
         jmp et1
+jmp etc, tye
 
     et1:
     mov bx, numero
