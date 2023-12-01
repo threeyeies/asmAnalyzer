@@ -145,9 +145,10 @@ def openFile():
                 # print("El código es correcto.")
                 text_bien.insert(END, 'El codigo es correcto')
             else:
+                badLines_str = ', '.join(map(str, incorrectLines))
                 # print("El código es incorrecto en las líneas:", incorrectLines)
                 text_bien.insert(END,
-                                 'El codigo es incorrecto en las lineas: ' + incorrectLines)
+                                 'El codigo es incorrecto en las lineas: ' + badLines_str)
 
             text_dataSegment.configure(state='disable')
             text_codeSegment.configure(state='disable')
