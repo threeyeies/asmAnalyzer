@@ -79,6 +79,11 @@ def openFile():
             text_sentencias.configure(state='normal')
             text_bien.configure(state='normal')
 
+            text_dataSegment.delete("1.0", END)
+            text_codeSegment.delete("1.0", END)
+            text_sentencias.delete("1.0", END)
+            text_bien.delete("1.0", END)
+
             for linea in contenido.split('\n'):
                 # pasando cada linea al metodo show de analysisForLine.py y guardando los returns en estas cuatro variables
                 lineaAnalizada, type_segment, lineNumber = show(linea)
@@ -169,6 +174,11 @@ def saveFile():
         text_codeSegment.configure(state='normal')
         text_sentencias.configure(state='normal')
         text_bien.configure(state='normal')
+
+        text_dataSegment.delete("1.0", END)
+        text_codeSegment.delete("1.0", END)
+        text_sentencias.delete("1.0", END)
+        text_bien.delete("1.0", END)
 
         for linea in contenido.split('\n'):
                 # pasando cada linea al metodo show de analysisForLine.py y guardando los returns en estas cuatro variables
