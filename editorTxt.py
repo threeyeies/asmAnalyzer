@@ -192,10 +192,6 @@ def saveFile():
 
             incorrectLines = [line for line,
                               state in lineStates if not state]
-            if not incorrectLines:
-                print("El código es correcto.")
-            else:
-                print("El código es incorrecto en las líneas:", incorrectLines)
 
             if type_segment == 1:
                 text_dataSegment.insert(END, lineaAnalizada + '\n')
@@ -251,6 +247,15 @@ def saveFile():
                 # Insertando palabra
                 text_sentencias.insert(
                     END, lexema + '\t' + comprobable + '\n')
+
+        if not incorrectLines:
+            # print("El código es correcto.")
+            text_bien.insert(END, 'El codigo es correcto')
+        else:
+            badLines_str = ', '.join(map(str, incorrectLines))
+            # print("El código es incorrecto en las líneas:", incorrectLines)
+            text_bien.insert(END,
+                             'El codigo es incorrecto en las lineas: ' + badLines_str)
 
         text_dataSegment.configure(state='disable')
         text_codeSegment.configure(state='disable')

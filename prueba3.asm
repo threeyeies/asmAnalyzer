@@ -22,7 +22,7 @@ main proc
 		inc ax
         loop L1
         jmp et1
-jmp etc, tye
+jmp etc
 
     et1:
     mov bx, numero
@@ -31,5 +31,17 @@ jmp etc, tye
 
 main endp
 end main
+
+
+
+
+
+
+
+
+
+
+
+
 
 
