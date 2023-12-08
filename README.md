@@ -2,6 +2,7 @@ Este es un programa analizador de sintaxis y lexico de un archivo .asm (MASM), s
 
 Desarrollado con python 3.11.4
 
+Archivo principal: editorTxt.py
 
 
 Algunas consideraciónes de su funcionamiento:
