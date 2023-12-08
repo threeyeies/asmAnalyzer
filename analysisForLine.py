@@ -41,6 +41,35 @@ def show(linea):
     return (linea, type_segment, lineNumber)
 
 
+def show2(linea, lineNumber):
+    global type_segment
+    # global lineNumber
+    lexema = ''
+    comprobable = ''
+
+    linea = linea.strip()  # Eliminar los saltos de linea
+    lineNumber += 1  # Incrementando linea
+    # busca si en la linea esta la etiqueta .data
+    if re.findall(r'\.data', linea, re.IGNORECASE):
+        type_segment = 1
+
+    # busca si en la linea esta la etiqueta .code
+    if re.findall(r'\.code', linea, re.IGNORECASE):
+        type_segment = 2
+
+    # determina si se ha encontrado .data y ya esta en la siguiente linea
+    if type_segment == 1 and not re.findall(r'\.data', linea, re.IGNORECASE):
+        getDataSegment(linea, type_segment)
+        syntaxAnalysis(linea, type_segment, lineNumber)
+
+    # determina si se ha encontrado .code y ya esta en la siguiente linea
+    if type_segment == 2 and not re.findall(r'\.code', linea, re.IGNORECASE):
+        getCodeSegment(linea, type_segment)
+        syntaxAnalysis(linea, type_segment, lineNumber)
+
+    return (linea, type_segment, lineNumber)
+
+
 def getDataSegment(linea, type_segment):
     # print(linea, end="")  # sustuir para que se muestre en ventana
     return (linea, type_segment)

@@ -9,6 +9,7 @@ ExitProcess proto,dwExitCode:dword
 .DATA
 numero DB 11111111b
 numero DB 11111111b
+numero BD 11111111b
 
 
 
@@ -28,20 +29,13 @@ jmp etc
     mov bx, numero
     neg numero
 
+    add ax, 4
+    sub ax, 1
+ 
+
 
 main endp
 end main
-
-
-
-
-
-
-
-
-
-
-
 
 
 

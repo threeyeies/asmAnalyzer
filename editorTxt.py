@@ -4,7 +4,7 @@ from tkinter import ttk
 from screeninfo import get_monitors
 from tkinter import font
 from ttkthemes import ThemedTk
-from analysisForLine import show, lexemeAnalysis, lineStates
+from analysisForLine import show, lexemeAnalysis, lineStates, show2
 import re
 
 # Cambiar el directorio de acceso para uno de Windows
@@ -169,98 +169,102 @@ def saveFile():
 
         textFile = open(statusName, 'w')
         textFile.write(textBox.get(1.0, END))
+
+        # print(textBox.get(1.0, END))
         textFile.close()
         print("Archivo guardado...")
         # Abrir de nuevo el archivo de la ruta statusName
         with open(statusName, 'r') as archivo:
             # Realiza operaciones en el archivo
-            contenido = archivo.read()
+            newcontenido = archivo.read()
             # print(contenido)
-        text_dataSegment.configure(state='normal')
-        text_codeSegment.configure(state='normal')
-        text_sentencias.configure(state='normal')
-        text_bien.configure(state='normal')
+            text_dataSegment.configure(state='normal')
+            text_codeSegment.configure(state='normal')
+            text_sentencias.configure(state='normal')
+            text_bien.configure(state='normal')
 
-        text_dataSegment.delete("1.0", END)
-        text_codeSegment.delete("1.0", END)
-        text_sentencias.delete("1.0", END)
-        text_bien.delete("1.0", END)
+            text_dataSegment.delete("1.0", END)
+            text_codeSegment.delete("1.0", END)
+            text_sentencias.delete("1.0", END)
+            text_bien.delete("1.0", END)
+            lineNumber = 1
 
-        for linea in contenido.split('\n'):
-            # pasando cada linea al metodo show de analysisForLine.py y guardando los returns en estas cuatro variables
-            lineaAnalizada, type_segment, lineNumber = show(linea)
+            for linea in newcontenido.split('\n'):
+                # pasando cada linea al metodo show de analysisForLine.py y guardando los returns en estas cuatro variables
+                lineaAnalizada, type_segment, lineNumber = show2(
+                    linea, lineNumber)
 
-            incorrectLines = [line for line,
-                              state in lineStates if not state]
+                incorrectLines = [line for line,
+                                  state in lineStates if not state]
 
-            if type_segment == 1:
-                text_dataSegment.insert(END, lineaAnalizada + '\n')
-            elif type_segment == 2:
-                text_codeSegment.insert(END, lineaAnalizada + '\n')
+                if type_segment == 1:
+                    text_dataSegment.insert(END, lineaAnalizada + '\n')
+                elif type_segment == 2:
+                    text_codeSegment.insert(END, lineaAnalizada + '\n')
 
-            isString = False
-            stringConstant = ''
+                isString = False
+                stringConstant = ''
 
-            # Para cada linea separar en palabras cuando encuentre espacios, comas, dos puntos y punto
-            for palabra in re.split(r'[ ,]', linea):
+                # Para cada linea separar en palabras cuando encuentre espacios, comas, dos puntos y punto
+                for palabra in re.split(r'[ ,]', linea):
 
-                # Comprobando si la línea está en blanco (sin caracteres visibles)
-                if not palabra.strip():
-                    continue
+                    # Comprobando si la línea está en blanco (sin caracteres visibles)
+                    if not palabra.strip():
+                        continue
 
-                # pasando cada palabra al metodo lexemeAnalysis en analisysForLine.py
-                lexema, isString, comprobable = lexemeAnalysis(
-                    palabra, isString)
-                # Comprobando si es un comentario
-                if comprobable == 'COMMENT':
-                    text_sentencias.insert(
-                        END, linea + '\t' + comprobable + '\n')
-                    break
-                # Comprueba si una directiva empieza con '.', si es asi todo lo de adelante sera contado como directiva
-                if comprobable == '.DIRECTIVES':
-                    text_sentencias.insert(
-                        END, linea + '\t' + 'DIRECTIVES' + '\n')
-                    break
+                    # pasando cada palabra al metodo lexemeAnalysis en analisysForLine.py
+                    lexema, isString, comprobable = lexemeAnalysis(
+                        palabra, isString)
+                    # Comprobando si es un comentario
+                    if comprobable == 'COMMENT':
+                        text_sentencias.insert(
+                            END, linea + '\t' + comprobable + '\n')
+                        break
+                    # Comprueba si una directiva empieza con '.', si es asi todo lo de adelante sera contado como directiva
+                    if comprobable == '.DIRECTIVES':
+                        text_sentencias.insert(
+                            END, linea + '\t' + 'DIRECTIVES' + '\n')
+                        break
 
-                # Comprueba si una macro o una función, si es asi todo lo de adelante es una macro o función
-                if comprobable == 'MACROS_AND_FUNCTIONS':
-                    text_sentencias.insert(
-                        END, linea + '\t' + comprobable + '\n')
-                    break
+                    # Comprueba si una macro o una función, si es asi todo lo de adelante es una macro o función
+                    if comprobable == 'MACROS_AND_FUNCTIONS':
+                        text_sentencias.insert(
+                            END, linea + '\t' + comprobable + '\n')
+                        break
 
-                # Comprobando si es una cadena, la primera vez que reciba STRING_CONSTANT, volvera isString = True, por lo que cada palabra siguiente la agregara
-                # a una lista para cuando vuelva a recibir STRING_CONSTANT cierre la cadena (isString = False) e imprima la lista con la cadena completa
-                if comprobable == "STRING_CONSTANT":
+                    # Comprobando si es una cadena, la primera vez que reciba STRING_CONSTANT, volvera isString = True, por lo que cada palabra siguiente la agregara
+                    # a una lista para cuando vuelva a recibir STRING_CONSTANT cierre la cadena (isString = False) e imprima la lista con la cadena completa
+                    if comprobable == "STRING_CONSTANT":
+                        if isString == True:
+                            stringConstant = stringConstant + lexema + '\t'
+                            continue
+                        if isString == False:
+                            stringConstant = stringConstant + lexema + '\t'
+                            text_sentencias.insert(
+                                END, stringConstant + comprobable + '\n')
+                            stringConstant = ''
+                            continue
                     if isString == True:
                         stringConstant = stringConstant + lexema + '\t'
                         continue
-                    if isString == False:
-                        stringConstant = stringConstant + lexema + '\t'
-                        text_sentencias.insert(
-                            END, stringConstant + comprobable + '\n')
-                        stringConstant = ''
-                        continue
-                if isString == True:
-                    stringConstant = stringConstant + lexema + '\t'
-                    continue
 
-                # Insertando palabra
-                text_sentencias.insert(
-                    END, lexema + '\t' + comprobable + '\n')
+                    # Insertando palabra
+                    text_sentencias.insert(
+                        END, lexema + '\t' + comprobable + '\n')
 
-        if not incorrectLines:
-            # print("El código es correcto.")
-            text_bien.insert(END, 'El codigo es correcto')
-        else:
-            badLines_str = ', '.join(map(str, incorrectLines))
-            # print("El código es incorrecto en las líneas:", incorrectLines)
-            text_bien.insert(END,
-                             'El codigo es incorrecto en las lineas: ' + badLines_str)
+            if not incorrectLines:
+                # print("El código es correcto.")
+                text_bien.insert(END, 'El codigo es correcto')
+            else:
+                badLines_str = ', '.join(map(str, incorrectLines))
+                # print("El código es incorrecto en las líneas:", incorrectLines)
+                text_bien.insert(END,
+                                 'El codigo es incorrecto en las lineas: ' + badLines_str)
 
-        text_dataSegment.configure(state='disable')
-        text_codeSegment.configure(state='disable')
-        text_sentencias.configure(state='disable')
-        text_bien.configure(state='disable')
+            text_dataSegment.configure(state='disable')
+            text_codeSegment.configure(state='disable')
+            text_sentencias.configure(state='disable')
+            text_bien.configure(state='disable')
 
     else:
         saveAs()
