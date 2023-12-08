@@ -37,3 +37,5 @@ Se han implementado las 3 fases solicitadas para la entrega del proyecto (fases 
 
 
 Protip: Para que el icono se pueda ver debe estar una carpeta fuera de donde esta todos estos scripts
+
+Protip: Rama3 y rama "Main" se encuentran con la entrega final.
